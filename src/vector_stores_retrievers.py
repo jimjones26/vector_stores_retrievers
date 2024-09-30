@@ -1,4 +1,5 @@
 from langchain_core.documents import Document
+from langchain_core.runnables import RunnableLambda
 from langchain_chroma import Chroma
 from langchain_ollama import ChatOllama, OllamaEmbeddings
 
@@ -42,3 +43,14 @@ vectorstore.similarity_search("cat")
 await vectorstore.asimilarity_search("cat")
 
 vectorstore.similarity_search_with_score("cat")
+
+# ------------------------------------------------------------------
+# Retrievers
+# ------------------------------------------------------------------
+retriever = RunnableLambda(vectorstore.similarity_search_with_score).bind(k=1)
+
+retriever.batch(["cat", "shark"])
+
+retriever = vectorstore.as_retriever(search_type="similarity", search_kwargs={"k": 1})
+
+retriever.batch(["cat", "bear"])
