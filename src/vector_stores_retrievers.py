@@ -29,7 +29,7 @@ documents = [
 ]
 
 embedding = OllamaEmbeddings(
-    base_url="http://a03a-216-147-123-78.ngrok-free.app",
+    base_url="http://f2da-216-147-123-78.ngrok-free.app",
     model="snowflake-arctic-embed:m-long",
 )
 
@@ -61,7 +61,7 @@ retriever.batch(["cat", "bear"])
 # ------------------------------------------------------------------
 llm = ChatOllama(
     model="llama3.2:3b-instruct-q8_0",
-    base_url="http://a03a-216-147-123-78.ngrok-free.app",
+    base_url="http://f2da-216-147-123-78.ngrok-free.app",
     temperature=0.2,
     num_ctx=16384,
 )
