@@ -1,7 +1,8 @@
 from langchain_core.documents import Document
-from langchain_core.runnables import RunnableLambda
+from langchain_core.runnables import RunnableLambda, RunnablePassthrough
 from langchain_chroma import Chroma
 from langchain_ollama import ChatOllama, OllamaEmbeddings
+from langchain_core.prompts import ChatPromptTemplate
 
 
 documents = [
@@ -54,3 +55,30 @@ retriever.batch(["cat", "shark"])
 retriever = vectorstore.as_retriever(search_type="similarity", search_kwargs={"k": 1})
 
 retriever.batch(["cat", "bear"])
+
+# ------------------------------------------------------------------
+# Minimal RAG example
+# ------------------------------------------------------------------
+llm = ChatOllama(
+    model="llama3.2:3b-instruct-q8_0",
+    base_url="http://a03a-216-147-123-78.ngrok-free.app",
+    temperature=0.2,
+    num_ctx=16384,
+)
+
+message = """
+Answer this question using the provided context only.
+
+{question}
+
+Context:
+{context}
+"""
+
+prompt = ChatPromptTemplate.from_messages([("human", message)])
+
+rag_chain = {"context": retriever, "question": RunnablePassthrough()} | prompt | llm
+
+response = rag_chain.invoke("tell me about cats")
+
+print(response.content)
