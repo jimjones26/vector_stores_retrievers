@@ -1,2 +1,5 @@
 ipykernel
 python-dotenv
+langchain
+langchain-chroma
+langchain-ollama
